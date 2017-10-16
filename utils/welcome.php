@@ -34,6 +34,7 @@ else{
 	<link rel="stylesheet" type="text/css" href="../bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../styles/file.css">
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initaile-scale=1">
 	<style>
@@ -68,15 +69,11 @@ else{
 
 </head>
 <body>
-
-
-
 	<div class="wrapper">
         <div class="container">
         	<div class="row">
                 <div class="col-md-12">
                 	<header id="header">
-
 					 	<div class="slider">
 					  		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 					  		<!-- Wrapper for slides -->
@@ -119,7 +116,7 @@ else{
                           	<ul class="nav main-menu navbar-nav">
                             	<li><a href="welcome.php" class="glyphicon glyphicon-home"></a></li>
                             	<li><a href="welcome.php?calendar" class="glyphicon glyphicon-calendar"></a></li>
-                            	<li><a href="welcome.php?notifications" class="glyphicon glyphicon-envelope"></a></li>
+                            	<li><a href="welcome.php?notifs" class="glyphicon glyphicon-envelope"></a></li>
                           	</ul>
                           
                            	<ul class="nav  navbar-nav navbar-right">
@@ -151,20 +148,62 @@ else{
 
                     if(isset($_GET['calendar'])){
                       require 'calendar.php';
-                    }
-
-                    if(isset($_GET['notifications'])){
-                      require 'notifications.php';
 					}
-                    
-                	?>
-                </div>
+					
+                    if(isset($_GET['notifs'])){
 				
+					$query1 = "select * from notifications where idDonneur='12345'";
+					$query = "select * from notifications where idDonneur='12345' and entete='First Test'";
+					$resultat = $pdo->query($query1);
+					echo "<div class='container'>";
+					echo "<div class='tabs'>";	
+					echo "<nav>";
+
+							while ($line = $resultat->fetch(PDO::FETCH_OBJ)) {
+								echo "<a>".$line->entete."</a> ";
+							}
+
+					echo "</nav>";
+					$query1 = "select * from notifications where idDonneur='12345'";
+					$query = "select * from notifications where idDonneur='12345' and entete='First Test'";
+					$resultat = $pdo->query($query1);
+					
+						while ($line = $resultat->fetch(PDO::FETCH_OBJ)) {
+							echo "<div class='content'>";
+								echo "<h2>".$line->entete."</h2> ";
+								echo "<a>".$line->corps."</a> ";
+							echo "</div>";
+						}
+					  
+					}
+					
+                	?>
+                </div>	
             </div>
         </div>
-    </div>
-	
+    </div>	
 </div>
+
+<script type="text/javascript">
+$(function() {
+$('.tabs nav a').on('click', function() {
+  show_content($(this).index());
+});
+
+show_content(0);
+
+function show_content(index) {
+  // Make the content visible
+  $('.tabs .content.visible').removeClass('visible');
+  $('.tabs .content:nth-of-type(' + (index + 1) + ')').addClass('visible');
+
+  // Set the tab to selected
+  $('.tabs nav a.selected').removeClass('selected');
+  $('.tabs nav a:nth-of-type(' + (index + 1) + ')').addClass('selected');
+}
+});
+
+</script>
 
 </body>
 </html>
